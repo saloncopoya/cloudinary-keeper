@@ -1,0 +1,81 @@
+name: Mantener Cloudinary Activo
+
+on:
+  schedule:
+    # EJECUCIÓN: Cada 15 días a las 10 AM
+    - cron: '0 10 */15 * *'
+  
+  # Para ejecutar manualmente si quieres
+  workflow_dispatch:
+
+jobs:
+  activar-cuentas:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Descargar código
+      uses: actions/checkout@v4
+    
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install cloudinary pillow
+    
+    - name: Crear imagen 1x1
+      run: |
+        python -c "
+        from PIL import Image
+        img = Image.new('RGBA', (1, 1), (0, 0, 0, 0))
+        img.save('pixel.png')
+        print('✅ Pixel creado')
+        "
+    
+    - name: Subir a Cloudinary
+      env:
+        CUENTA_1: ${{ secrets.CLOUDINARY_ACCOUNT_1 }}
+        CUENTA_2: ${{ secrets.CLOUDINARY_ACCOUNT_2 }}
+        CUENTA_3: ${{ secrets.CLOUDINARY_ACCOUNT_3 }}
+        CUENTA_4: ${{ secrets.CLOUDINARY_ACCOUNT_4 }}
+      run: |
+        python -c "
+        import os, json, cloudinary, cloudinary.uploader
+        from datetime import datetime
+        
+        cuentas = []
+        for i in range(1, 5):
+            datos = os.environ.get(f'CUENTA_{i}')
+            if datos:
+                try:
+                    cuentas.append(json.loads(datos))
+                    print(f'📝 Cuenta {i} cargada')
+                except:
+                    print(f'❌ Error cuenta {i}')
+        
+        for idx, cuenta in enumerate(cuentas, 1):
+            try:
+                cloudinary.config(
+                    cloud_name=cuenta.get('cloud_name'),
+                    api_key=cuenta.get('api_key'),
+                    api_secret=cuenta.get('api_secret', ''),
+                    secure=True
+                )
+                
+                fecha = datetime.now().strftime('%Y%m%d')
+                resultado = cloudinary.uploader.upload(
+                    'pixel.png',
+                    public_id=f'keep_alive_{fecha}',
+                    upload_preset=cuenta.get('upload_preset', ''),
+                    overwrite=False
+                )
+                
+                print(f'✅ Cuenta {idx} ACTIVADA: {cuenta[\"cloud_name\"]}')
+            except Exception as e:
+                print(f'⚠️ Cuenta {idx} error: {str(e)}')
+        
+        print('🎯 Todas las cuentas procesadas')
+        "
