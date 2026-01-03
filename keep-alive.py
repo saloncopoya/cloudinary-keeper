@@ -12,33 +12,32 @@ import os
 # ==============================================
 # TUS 4 CUENTAS CLOUDINARY - ¡EDITA ESTO!
 # ==============================================
-# ==============================================
-# CONFIGURACIÓN DESDE VARIABLES DE ENTORNO
-# ==============================================
-import os
-
-CLOUDINARY_ACCOUNTS = []
-
-# Agregar cuentas desde variables de entorno
-for i in range(1, 5):  # Para 4 cuentas
-    cloud_name = os.environ.get(f'CLOUD_NAME_{i}')
-    api_key = os.environ.get(f'API_KEY_{i}')
-    
-    if cloud_name and api_key:
-        CLOUDINARY_ACCOUNTS.append({
-            "name": f"Cuenta {i}",
-            "cloud_name": cloud_name,
-            "api_key": api_key,
-            "upload_preset": "ml_default"
-        })
-
-# Verificar que hay cuentas
-if not CLOUDINARY_ACCOUNTS:
-    print("❌ ERROR: No se configuraron cuentas Cloudinary")
-    print("   Verifica los secrets en GitHub")
-    exit(1)
-
-print(f"✅ Cuentas configuradas: {len(CLOUDINARY_ACCOUNTS)}")
+CLOUDINARY_ACCOUNTS = [
+    {
+        "name": "Cuenta 1",
+        "cloud_name": "dxjgyqcby",  # Ejemplo: "dvcuroh7"
+        "api_key": "871575764573387",        # Ejemplo: "123456789012345"
+        "upload_preset": "sinfirmaupload"
+    },
+    {
+        "name": "Cuenta 2",
+        "cloud_name": "dvcuroh7x",
+        "api_key": "994915652739941",
+        "upload_preset": "sinfirmaupload"
+    },
+    {
+        "name": "Cuenta 3",
+        "cloud_name": "dnfbrycla",
+        "api_key": "966771178448349",
+        "upload_preset": "presetsinfirma3"
+    },
+    {
+        name": "Cuenta 4",
+        "cloud_name": "davovja1g",
+        "api_key": "688569119694815",
+        "upload_preset": "sinfirmaupload"
+    }
+]
 
 # ==============================================
 # PIXEL TRANSPARENTE de 1x1 (Base64)
