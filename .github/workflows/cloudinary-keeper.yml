@@ -48,27 +48,27 @@ jobs:
         CLOUDINARY_ACCOUNTS = [
             {
                 "name": "Cuenta 1",
-                "cloud_name": "dxjgyqcby",
-                "api_key": "871575764573387",
-                "upload_preset": "sinfirmaupload"
+                "cloud_name": "$CLOUD_NAME_1",
+                "api_key": "$API_KEY_1",
+                "upload_preset": "ml_default"
             },
             {
                 "name": "Cuenta 2",
-                "cloud_name": "dvcuroh7x",
-                "api_key": "994915652739941",
-                "upload_preset": "sinfirmaupload"
+                "cloud_name": "$CLOUD_NAME_2",
+                "api_key": "$API_KEY_2",
+                "upload_preset": "ml_default"
             },
             {
                 "name": "Cuenta 3",
-                "cloud_name": "dnfbrycla",
-                "api_key": "966771178448349",
-                "upload_preset": "presetsinfirma3"
+                "cloud_name": "$CLOUD_NAME_3",
+                "api_key": "$API_KEY_3",
+                "upload_preset": "ml_default"
             },
             {
                 "name": "Cuenta 4",
-                "cloud_name": "davovja1g",
-                "api_key": "688569119694815",
-                "upload_preset": "sinfirmaupload"
+                "cloud_name": "$CLOUD_NAME_4",
+                "api_key": "$API_KEY_4",
+                "upload_preset": "ml_default"
             }
         ]
         EOF
