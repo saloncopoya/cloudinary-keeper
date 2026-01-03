@@ -1,0 +1,93 @@
+name: Cloudinary Keeper
+
+on:
+  schedule:
+    # Ejecuta cada 15 días a las 8 AM UTC
+    - cron: '0 8 */15 * *'
+  
+  # También puedes ejecutar manualmente
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Descargar código
+      uses: actions/checkout@v3
+    
+    - name: 🐍 Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: 📦 Instalar dependencias
+      run: |
+        pip install requests
+    
+    - name: 🚀 Ejecutar script (con variables)
+      env:
+        # Cuenta 1
+        CLOUD_NAME_1: ${{ secrets.CLOUD_NAME_1 }}
+        API_KEY_1: ${{ secrets.API_KEY_1 }}
+        
+        # Cuenta 2
+        CLOUD_NAME_2: ${{ secrets.CLOUD_NAME_2 }}
+        API_KEY_2: ${{ secrets.API_KEY_2 }}
+        
+        # Cuenta 3
+        CLOUD_NAME_3: ${{ secrets.CLOUD_NAME_3 }}
+        API_KEY_3: ${{ secrets.API_KEY_3 }}
+        
+        # Cuenta 4
+        CLOUD_NAME_4: ${{ secrets.CLOUD_NAME_4 }}
+        API_KEY_4: ${{ secrets.API_KEY_4 }}
+      run: |
+        # Crear archivo de configuración temporal
+        cat > config.py << 'EOF'
+        CLOUDINARY_ACCOUNTS = [
+            {
+                "name": "Cuenta 1",
+                "cloud_name": "dxjgyqcby",
+                "api_key": "871575764573387",
+                "upload_preset": "sinfirmaupload"
+            },
+            {
+                "name": "Cuenta 2",
+                "cloud_name": "dvcuroh7x",
+                "api_key": "994915652739941",
+                "upload_preset": "sinfirmaupload"
+            },
+            {
+                "name": "Cuenta 3",
+                "cloud_name": "dnfbrycla",
+                "api_key": "966771178448349",
+                "upload_preset": "presetsinfirma3"
+            },
+            {
+                "name": "Cuenta 4",
+                "cloud_name": "davovja1g",
+                "api_key": "688569119694815",
+                "upload_preset": "sinfirmaupload"
+            }
+        ]
+        EOF
+        
+        # Reemplazar variables
+        sed -i "s|\$CLOUD_NAME_1|$CLOUD_NAME_1|g" config.py
+        sed -i "s|\$API_KEY_1|$API_KEY_1|g" config.py
+        sed -i "s|\$CLOUD_NAME_2|$CLOUD_NAME_2|g" config.py
+        sed -i "s|\$API_KEY_2|$API_KEY_2|g" config.py
+        sed -i "s|\$CLOUD_NAME_3|$CLOUD_NAME_3|g" config.py
+        sed -i "s|\$API_KEY_3|$API_KEY_3|g" config.py
+        sed -i "s|\$CLOUD_NAME_4|$CLOUD_NAME_4|g" config.py
+        sed -i "s|\$API_KEY_4|$API_KEY_4|g" config.py
+        
+        # Ejecutar script
+        python keep-alive.py
+    
+    - name: 📝 Mostrar logs
+      if: always()
+      run: |
+        echo "✅ Trabajo completado"
+        echo "📅 Próxima ejecución: cada 15 días"
